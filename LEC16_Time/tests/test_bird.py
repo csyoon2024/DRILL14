@@ -5,7 +5,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import game_framework
-from bird import Bird, BirdFlock, advance_reflected_position
+from bird import (
+    FRAME_COUNT,
+    Bird,
+    BirdFlock,
+    advance_reflected_position,
+)
 
 
 class FakeImage:
@@ -37,6 +42,17 @@ class BirdAnimationTests(unittest.TestCase):
             fast_frames.animation_frame, slow_frames.animation_frame
         )
         self.assertAlmostEqual(fast_frames.animation_frame, 12.0)
+
+    def test_animation_skips_empty_last_sprite_cell(self):
+        bird = Bird(self.image, 0, 0, animation_frame=13)
+
+        bird.draw()
+        self.assertEqual(self.image.draw_calls[-1][0], 551)
+        self.assertEqual(self.image.draw_calls[-1][1], 0)
+
+        bird.update(1 / 12)
+        self.assertEqual(FRAME_COUNT, 14)
+        self.assertAlmostEqual(bird.animation_frame, 0.0)
 
     def test_flock_contains_exactly_ten_birds_and_draws_each(self):
         flock = BirdFlock(self.image, 1600, 600)
