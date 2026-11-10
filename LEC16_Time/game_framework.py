@@ -38,18 +38,17 @@ def run(start_mode):
     stack = [start_mode]
     global frame_time
     frame_time = 0.0
-    current_time = time.time()
+    previous_frame_time = time.perf_counter()
     try:
         start_mode.init()
         
         while running:
+            current_time = time.perf_counter()
+            frame_time = max(0.0, current_time - previous_frame_time)
+            previous_frame_time = current_time
             stack[-1].handle_events()
             stack[-1].update()
             stack[-1].render()
-            frame_time = time.time() - current_time
-            frame_rate = 1.0 / frame_time
-            current_time += frame_time
-            print(f'Frame Time: {frame_time}, Frame Rate: {frame_rate}')
     finally:
         while stack:
             stack.pop().finish()
