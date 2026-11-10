@@ -2,9 +2,11 @@ from pico2d import *
 import game_world
 import game_framework
 from boy import Boy
+from bird import BirdFlock
 from grass import Grass
 
 boy = None
+bird_flock = None
 
 
 def handle_events():
@@ -22,10 +24,17 @@ def handle_events():
 
 
 def init():
-    global boy
+    global boy, bird_flock
 
     boy = Boy()
     game_world.add_oject(boy)
+
+    bird_flock = BirdFlock(
+        load_image('bird_animation.png'),
+        get_canvas_width(),
+        get_canvas_height(),
+    )
+    game_world.add_oject(bird_flock)
 
     grass = Grass()
     game_world.add_oject(grass, 0)
@@ -40,9 +49,10 @@ def resume():
 
 
 def finish():
-    global boy
+    global boy, bird_flock
     game_world.clear()
     boy = None
+    bird_flock = None
 
 
 def update():
@@ -52,7 +62,6 @@ def render():
     clear_canvas()
     game_world.render()
     update_canvas()
-
 
 
 
