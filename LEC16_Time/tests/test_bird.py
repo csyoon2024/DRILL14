@@ -55,6 +55,20 @@ class BirdAnimationTests(unittest.TestCase):
         self.assertAlmostEqual(flock.x, 845.0)
         self.assertAlmostEqual(flock.birds[0].animation_frame, 3.0)
 
+    def test_flock_distance_is_independent_of_frame_rate(self):
+        thirty_fps_flock = BirdFlock(self.image, 1600, 600)
+        one_twenty_fps_flock = BirdFlock(self.image, 1600, 600)
+
+        for _ in range(30):
+            game_framework.frame_time = 1 / 30
+            thirty_fps_flock.update()
+        for _ in range(120):
+            game_framework.frame_time = 1 / 120
+            one_twenty_fps_flock.update()
+
+        self.assertAlmostEqual(thirty_fps_flock.x, 980.0)
+        self.assertAlmostEqual(one_twenty_fps_flock.x, 980.0)
+
     def test_birds_face_the_direction_of_flight(self):
         flock = BirdFlock(self.image, 1600, 600)
         flock.direction = -1
