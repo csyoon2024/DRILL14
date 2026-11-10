@@ -1,3 +1,6 @@
+import game_framework
+
+
 FRAME_COLUMNS = 5
 FRAME_ROWS = 3
 FRAME_COUNT = FRAME_COLUMNS * FRAME_ROWS
@@ -88,7 +91,8 @@ class BirdFlock:
     def _bird_y(self, row):
         return self.canvas_height - 90 - row * ROW_SPACING
 
-    def update(self, frame_time):
+    def update(self):
+        frame_time = game_framework.frame_time
         self.x, self.direction = advance_reflected_position(
             self.x,
             self.direction,
